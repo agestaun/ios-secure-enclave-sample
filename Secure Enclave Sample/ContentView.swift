@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct ContentView: View {
+    
     @State private var text: String = "Hello World!"
     @State private var decryptedText: String = "-"
     
     var body: some View {
         VStack(alignment: .center, spacing: 8) {
-            Text("Enter the text to encrypt")
+            Text("Enter the text to encrypt 🔒")
             TextField("Text to encrypt", text: $text)
                 .textInputAutocapitalization(.never)
                 .disableAutocorrection(true)
@@ -25,20 +26,18 @@ struct ContentView: View {
                 }
             
             
-            Text("Decrypted text:").padding(.vertical, 16).fontWeight(.bold)
+            Text("Decrypted text 🔓:").padding(.vertical, 16).fontWeight(.bold)
             Text(decryptedText)
             
             
             Button("Encrypt") {
-                print("Button tapped! \(text)")
                 do {
-                    let SEManager = SecureEnclaveManager.init(publicLabel: "publicKeyName", privateLabel: "privateSEKeyName")
-                    let privateKeyRef = try SEManager.generateKeyPair();
+                    let SEManager = SecureEnclaveManager.init(publicKeyName: "publicKeyName", privateKeyName: "privateSEKeyName")
+                    let keys = try SEManager.generateKeyPair();
                     print("Keys generated successfully ✅!")
-                    let publicKey = SEManager.getPublicKeyFromPrivateKey(privateKey: privateKeyRef)
-                    //let isAlgoSupported = SecKeyIsAlgorithmSupported(privateKeyRef, .encrypt, .eciesEncryptionCofactorVariableIVX963SHA256AESGCM)(privateKeyRef)
-                    let encryptedData = try SEManager.encrypt(data: text.data(using: .utf8)!, publicKey: publicKey!)
-                    let decryptedData = try SEManager.decrypt(encryptedData, privateKey: privateKeyRef)
+                    
+                    let encryptedData = try SEManager.encrypt(data: text.data(using: .utf8)!, publicKey: keys.publicKey)
+                    let decryptedData = try SEManager.decrypt(encryptedData, privateKey: keys.privateKey)
                     
                     print("Encrypted data 🔒: \(decryptedData)")
                     
