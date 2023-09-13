@@ -1,4 +1,4 @@
-# iOS Secure Enclave Sample
+# iOS Secure Enclave Sample 🔏
 A sample Swift project demonstrating the secure creation and storage of private keys on iOS, utilizing the "Secure Enclave," Apple's hardware-based key manager, for the highest level of security.
 
 The Secure Enclave is a hardware-based key manager that’s isolated from the main processor to provide an extra layer of security. When you protect a private key with the Secure Enclave, you never handle the plain-text key, making it difficult for the key to become compromised. Instead, you instruct the Secure Enclave to create and encode the key, and later to decode and perform operations with it. You receive only the output of these operations, such as encrypted data or a cryptographic signature verification outcome.
